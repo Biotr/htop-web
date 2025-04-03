@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTOP</title>
+    <style>
+        body,html {
+            margin:0;
+            padding: 0;
+            font-family: "Consolas", "Courier New", monospace;
+            font-size: 14px;
+            color: black;
+            letter-spacing:0px;
+            line-height: 1;
+            font-weight: normal;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        body{
+            background-color: #002451;
+            align-content: center;
+            height: 100vh;
+        }
+        main, footer{
+            min-width: 300px;
+            max-width: 1300px;
+            margin: auto;
+        }
+        main{
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            height: 100vh;
+        }
+        footer{
+            flex: 1;
+        }
+        span{
+            position: sticky;
+        }
+        .cores-container {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            justify-content: space-between;
+        }
+        .second-container{
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+        }
+        
+        .cell{
+            color:#99ffff;
+            overflow: hidden;
+            text-wrap: nowrap;
+            margin: 2px 5px;
+            white-space: pre;
+        }
+        table{
+            display: block;
+            width: inherit;
+            text-align: right;
+            border-collapse: collapse;
+            text-wrap: nowrap;
+            overflow-y: auto;
+            cursor:pointer;
+            position:relative;
+            flex:1;
+        }
+        th{
+            background-color: #b8f171;
+            color:#000000;
+            font-weight: normal;
+            margin: 0;
+        }
+        th:nth-child(2),td:nth-child(1), th:nth-child(12),td:nth-child(2),td:nth-child(12){
+            text-align: left;
+            white-space: pre;
+        }
+        th:nth-child(11), td:nth-child(11){
+            text-align: center;
+        }
+        td{
+            color: #cccccc;
+        }
+        td,th{
+            padding-left: 5px;
+        }
+        th:nth-child(12){
+            width: 100%;
+        }
+        .active>td,footer>span{
+            background-color: #99ffff;
+            color: black;
+        }
+        thead{
+            position: sticky;
+            top: 0; 
+            z-index: 1;
+        }
+        tbody{
+            position: relative;
+        }
+        
+        @media only screen and (max-width: 600px){
+            .cores-container{
+                grid-template-columns: repeat(2,1fr);
+            }
+            .second-container{
+                grid-template-columns: repeat(1,1fr);
+            } 
+        }
+
+        </style>
+  </head>
+  <body>
+      <main>
+          <div id="cores-container" class="cores-container"></div>
+          <div class="second-container">
+              <div id="memory-container" class="memory-conatiner">
+                  <div id="total-memory" class="cell " ></div>
+                  <div id="swp-memory" class="cell " ></div>
+                </div> 
+                <div id="info" class="rest"></div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>PID</th>
+                        <th>USER</th>
+                        <th>PRI</th>
+                        <th>NI</th>
+                        <th>VIRT</th>
+                        <th>RES</th>
+                        <th>SHR</th>
+                        <th>S</th>
+                        <th>CPU%</th>
+                        <th>MEM%</th>
+                        <th>TIME+</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+
+                </tbody>
+            </table>
+        </main>
+        <footer><span onclick="handleKillProces()">Enter(or click) to kill</span></footer>
+
+        <script src="index.js"></script>
+    </body>
+    </html>
