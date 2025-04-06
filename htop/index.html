@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTOP</title>
+    <link rel="stylesheet" href="./style.css"></link>
+    </head>
+    <body>
+        <main id="main">
+            <div id="cores-container" class="cores-container"></div>
+            <div class="second-container">
+                <div id="memory-container" class="memory-conatiner">
+                    <div id="total-memory" class="cell " ></div>
+                    <div id="swp-memory" class="cell " ></div>
+                </div> 
+                <div id="info" class="rest"></div>
+            </div>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>USER</th>
+                            <th>PRI</th>
+                            <th>NI</th>
+                            <th>VIRT</th>
+                            <th>RES</th>
+                            <th>SHR</th>
+                            <th>S</th>
+                            <th>CPU%</th>
+                            <th>MEM%</th>
+                            <th>TIME+</th>
+                            <th>Command</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="menu" id="menu"><span id="kill-button" onclick="handleKillProces()">Enter(or click) to kill</span></div>
+        </main>
+        <div id="status" class="status"></div>
+        <script type="module" src="./htop.js"></script>
+    </body>
+</html>

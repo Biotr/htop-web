@@ -1,0 +1,41 @@
+
+body,html {
+    margin:0;
+    padding: 0;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 14px;
+    color: #99ffff;
+    letter-spacing:0px;
+    line-height: 1;
+    font-weight: normal;
+    background-color: #002451;
+    height: 100dvh;
+}
+body{
+    display: flex;
+}
+main{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 30px;
+    align-items: center;
+}
+main * {
+    margin-top: 20px;
+}
+button{
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+input{
+    background: none;
+    border: 1px solid #99ffff;
+    color: #99ffff;
+    text-align: center;
+}
