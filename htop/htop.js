@@ -124,7 +124,8 @@ socket.addEventListener("open", () => {
     document.getElementById("menu").style.display = "flex";
 });
 
-socket.addEventListener("error", () => {
+socket.addEventListener("error", (event) => {
+    console.log("Websocket error: ", event);
     connectionStatus.innerHTML = "Cannot connect.";
 });
 
