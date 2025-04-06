@@ -8,7 +8,7 @@ import {
 const address = localStorage.getItem("address");
 const shouldMockData = address !== "";
 const socket = shouldMockData
-    ? new WebSocket(`ws://${address}:8765`)
+    ? new WebSocket(`wss://${address}:8765`)
     : fakeSocket;
 
 let tempProcesses;
