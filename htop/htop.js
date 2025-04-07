@@ -5,10 +5,15 @@ import {
     convertWidthToChars,
 } from "./modules/conversions.js";
 
+const ssl = {
+    protocolVersion: 8,
+    origin: "https://biotr.github.io",
+    rejectUnauthorized: false,
+};
 const address = localStorage.getItem("address");
 const shouldMockData = address !== "";
 const socket = shouldMockData
-    ? new WebSocket(`wss://${address}:8765`)
+    ? new WebSocket(`wss://${address}:8765`, ssl)
     : fakeSocket;
 
 let tempProcesses;
