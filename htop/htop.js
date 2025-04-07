@@ -1,15 +1,9 @@
 import fakeSocket from "./modules/fakeSocket.js";
-import {
-    convertUnit,
-    convertTime,
-    convertWidthToChars,
-} from "./modules/conversions.js";
+import { convertUnit, convertTime, convertWidthToChars } from "./modules/conversions.js";
 
 const address = localStorage.getItem("address");
 const shouldMockData = address !== "";
-const socket = shouldMockData
-    ? new WebSocket(`wss://${address}:8765`)
-    : fakeSocket;
+const socket = shouldMockData ? new WebSocket(`wss://${address}:8765`) : fakeSocket;
 
 let tempProcesses;
 let activeProces = 0;
@@ -20,6 +14,7 @@ const swpMem = document.getElementById("swp-memory");
 const info = document.getElementById("info");
 const coreUsageContainer = document.getElementById("cores-container");
 const coresContainers = [];
+const killButton = document.getElementById("kill-button");
 connectionStatus.innerHTML = "Connecting...";
 
 const handleMouseClick = (index) => {
@@ -34,9 +29,7 @@ const handleKillProces = () => {
 const getMoreInfo = (processes, loadAvg, uptime) => {
     const numberOfTasks = processes.length;
     const runningProcesses = [];
-    processes.forEach(
-        (proces) => proces.status === "R" && runningProcesses.push(proces)
-    );
+    processes.forEach((proces) => proces.status === "R" && runningProcesses.push(proces));
     const systemRunningTime = convertTime(uptime, 60);
     const averageLoad = loadAvg.join(", ");
     const numberOfRunningTasks = runningProcesses.length;
@@ -68,22 +61,16 @@ const refreshProcesses = () => {
                     <td>${proces["command"]}</td>`;
     });
 };
-
-const refreshBars = (data, suffix, prefix, container) => {
+const refreshBar = (value, maxValue, char, suffix, container) => {
     const toFill = convertWidthToChars(container) - 5;
-    let filledWithBars, word;
-    if (prefix === "%") {
-        filledWithBars = Math.ceil((parseFloat(data) * toFill) / 100);
-        word = data + prefix;
-    } else {
-        filledWithBars = Math.ceil((data * toFill) / prefix);
-        word =
-            convertUnit(data, 1, 3, "K") + "/" + convertUnit(prefix, 1, 3, "K");
-    }
-    const filledWithSpaces = toFill - filledWithBars;
+    const filledWithBars = maxValue && Math.ceil((parseFloat(value) * toFill) / maxValue);
+    const filledWithSpaces = maxValue ? toFill - filledWithBars : toFill;
+    const word = char == "%" ? value + char : `${convertUnit(value, 1, 3, "K")}/${convertUnit(maxValue, 1, 3, "K")}`;
+
     const bars = "|".repeat(filledWithBars);
     const spaces = " ".repeat(filledWithSpaces);
     const loadingBar = `${suffix.padStart(3, " ")}[${bars}${spaces}]`;
+
     const barSplitted = loadingBar.split("");
     const maxNumberToFill = barSplitted.length - word.length;
     for (let i = maxNumberToFill; i < barSplitted.length; i++) {
@@ -117,11 +104,11 @@ document.body.addEventListener("keyup", (event) => {
     }
     refreshProcesses();
 });
+killButton.addEventListener("click", handleKillProces);
 
 socket.addEventListener("open", () => {
     connectionStatus.style.display = "none";
     document.getElementById("main").style.display = "flex";
-    document.getElementById("menu").style.display = "flex";
 });
 
 socket.addEventListener("error", (event) => {
@@ -133,47 +120,19 @@ socket.addEventListener("close", () => {
     connectionStatus.innerHTML = "Connection closed.";
 });
 socket.addEventListener("message", (event) => {
-    const {
-        memory_info: memoryInfo,
-        cores_usage: coresUsage,
-        processes,
-        load_average: loadAvg,
-        uptime,
-    } = JSON.parse(event.data);
-    const {
-        total_mem: totalRamMemory,
-        used_mem: usedRamMemory,
-        swap_mem: totalSwpMemory,
-        swap_used: usedSwpMemory,
-    } = memoryInfo;
+    const { memory_info: memoryInfo, cores_usage: coresUsage, processes, load_average: loadAvg, uptime } = JSON.parse(event.data);
+    const { total_mem: totalRamMemory, used_mem: usedRamMemory, swap_used: usedSwpMemory } = memoryInfo;
 
     const coresUsageValues = Object.values(coresUsage).slice(1);
     !coresContainers.length && createCoresContainers(coresUsageValues.length);
 
-    coresUsageValues.forEach((core, index) => {
-        coresContainers[index].innerHTML = refreshBars(
-            core,
-            index.toString(),
-            "%",
-            coresContainers[index]
-        );
+    coresUsageValues.forEach((coreUsage, index) => {
+        coresContainers[index].innerHTML = refreshBar(coreUsage, 100, "%", index.toString(), coresContainers[index]);
     });
-
-    ramMem.innerHTML = refreshBars(
-        usedRamMemory,
-        "Mem",
-        totalRamMemory,
-        ramMem
-    );
-
-    swpMem.innerHTML = refreshBars(
-        usedSwpMemory,
-        "Swp",
-        totalSwpMemory,
-        swpMem
-    );
-
+    ramMem.innerHTML = refreshBar(usedRamMemory, totalRamMemory, "/", "Mem", ramMem);
+    swpMem.innerHTML = refreshBar(usedSwpMemory, totalSwpMemory, "/", "Swp", swpMem);
     info.innerHTML = getMoreInfo(processes, loadAvg, uptime);
+
     processes.forEach((proces, index) => (proces["id"] = index));
     tempProcesses = processes;
 
