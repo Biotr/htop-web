@@ -6,8 +6,6 @@ import {
 } from "./modules/conversions.js";
 
 const ssl = {
-    protocolVersion: 8,
-    origin: "https://biotr.github.io",
     rejectUnauthorized: false,
 };
 const address = localStorage.getItem("address");
