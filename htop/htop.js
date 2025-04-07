@@ -5,13 +5,10 @@ import {
     convertWidthToChars,
 } from "./modules/conversions.js";
 
-const ssl = {
-    rejectUnauthorized: false,
-};
 const address = localStorage.getItem("address");
 const shouldMockData = address !== "";
 const socket = shouldMockData
-    ? new WebSocket(`wss://${address}:8765`, ssl)
+    ? new WebSocket(`wss://${address}:8765`)
     : fakeSocket;
 
 let tempProcesses;
