@@ -121,7 +121,7 @@ socket.addEventListener("close", () => {
 });
 socket.addEventListener("message", (event) => {
     const { memory_info: memoryInfo, cores_usage: coresUsage, processes, load_average: loadAvg, uptime } = JSON.parse(event.data);
-    const { total_mem: totalRamMemory, used_mem: usedRamMemory, swap_used: usedSwpMemory } = memoryInfo;
+    const { total_mem: totalRamMemory, used_mem: usedRamMemory, swap_mem: totalSwpMemory, swap_used: usedSwpMemory } = memoryInfo;
 
     const coresUsageValues = Object.values(coresUsage).slice(1);
     !coresContainers.length && createCoresContainers(coresUsageValues.length);
