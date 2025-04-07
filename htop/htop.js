@@ -52,7 +52,7 @@ const refreshProcesses = () => {
                     <td>${proces["pri"]}</td>
                     <td>${proces["ni"]}</td>
                     <td>${convertUnit(proces["virt"])}</td> 
-                    <td>${convertUnit(proces["res"])}</td> 
+                    <td>${convertUnit(proces["res"], 1)}</td> 
                     <td>${convertUnit(proces["shr"])}</td> 
                     <td>${proces["status"]}</td>
                     <td>${proces["pid_cpu_usage"].toFixed(1)}</td>

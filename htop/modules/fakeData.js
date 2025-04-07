@@ -77,11 +77,7 @@ const getCoresUsage = () => {
 };
 
 const getLoadAverage = () => {
-    const loadAverage = [
-        getRandom(0.08, 0.13, 2).toFixed(2),
-        getRandom(0.08, 0.13, 2).toFixed(2),
-        getRandom(0.08, 0.13, 2).toFixed(2),
-    ];
+    const loadAverage = [getRandom(0.08, 0.13, 2).toFixed(2), getRandom(0.08, 0.13, 2).toFixed(2), getRandom(0.08, 0.13, 2).toFixed(2)];
     return loadAverage;
 };
 
