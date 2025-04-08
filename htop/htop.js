@@ -25,6 +25,9 @@ const handleMouseClick = (index) => {
 const handleKillProces = () => {
     socket.send(tempProcesses[activeProces]["pid"]);
 };
+const handleKillingStatus = (status) => {
+    document.getElementById("killing-status").innerHTML = status;
+};
 
 const getMoreInfo = (processes, loadAvg, uptime) => {
     const numberOfTasks = processes.length;
@@ -120,6 +123,11 @@ socket.addEventListener("close", () => {
     connectionStatus.innerHTML = "Connection closed.";
 });
 socket.addEventListener("message", (event) => {
+    const data = JSON.parse(event.data);
+    if (data["type"] == "kill_status") {
+        handleKillingStatus(data["status"]);
+        return;
+    }
     const { memory_info: memoryInfo, cores_usage: coresUsage, processes, load_average: loadAvg, uptime } = JSON.parse(event.data);
     const { total_mem: totalRamMemory, used_mem: usedRamMemory, swap_mem: totalSwpMemory, swap_used: usedSwpMemory } = memoryInfo;
 

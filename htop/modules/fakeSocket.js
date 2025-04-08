@@ -19,9 +19,10 @@ class FakeSocket {
 
     send(message) {
         delProces(message);
+        this.sendToClient(JSON.stringify({ type: "kill_status", status: `Process ${message}, killed.` }));
     }
 
-    sendMessage(data) {
+    sendToClient(data) {
         this.runListener("message", data);
     }
 
@@ -34,11 +35,11 @@ const socket = new FakeSocket();
 
 setTimeout(() => {
     socket.open();
-    socket.sendMessage(getFakeData());
+    socket.sendToClient(getFakeData());
 }, 1000);
 
 setInterval(() => {
-    socket.sendMessage(getFakeData());
+    socket.sendToClient(getFakeData());
 }, 1000);
 
 export default socket;
